@@ -15,8 +15,10 @@ public class Main {
     public static ArrayList<Entity> players= new ArrayList<>();
     static ArrayList<String> levels= new ArrayList<>();
     static int numberLevels;
+
     public static void main(String[] args) {
 
+        System.out.println("Root directory: "+System.getProperty("user.dir"));
         try {
             absolutePath = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 
@@ -32,8 +34,7 @@ public class Main {
         Scanner myObj = new Scanner(System.in);
         System.out.println("How many players");
 
-        int playercount = myObj.nextInt();
-        myObj.nextLine();
+        int playercount = Integer.parseInt(myObj.nextLine());
         pointAllocation(playercount, myObj);
         myObj.close();
 
@@ -47,8 +48,24 @@ public class Main {
 
     static void levels(){
         int n;
-        System.out.println(absolutePath.getAbsolutePath());
-        String path=absolutePath.getAbsolutePath()+"\\engine\\levels\\";
+        String campaign = "CCC";
+        Scanner myObj = new Scanner(System.in);
+        System.out.println("What campaign?");
+        campaign = myObj.nextLine();
+
+        // Get the location of the JAR file
+        File jarFile = null;
+        try {
+            jarFile = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Get the parent directory
+        String jarDirectory = jarFile.getParent();
+        System.out.println("JAR directory: " + jarDirectory);
+
+        String path = jarDirectory + "\\resources\\levels\\"+campaign+"\\";
 
         for (File f: Objects.requireNonNull(new File(path).listFiles())) {
 
@@ -57,6 +74,7 @@ public class Main {
         }
 
         n= Objects.requireNonNull(new File(path).list()).length;
+        System.out.println(n);
         numberLevels= n;
     }
 
